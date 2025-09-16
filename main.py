@@ -26,7 +26,6 @@ def calculate_payee(gross_salary):
     """
     # Subtracting NSSF to get taxable income
     taxable_income = gross_salary - calculate_nssf(gross_salary)#nssf
-    
     # KRA brackets
     if taxable_income <= 24000:
         tax = taxable_income * 0.10
@@ -36,7 +35,6 @@ def calculate_payee(gross_salary):
     else:
         # 24,000 @10% + 8,333 @25% + the rest @30%
         tax = (24000 * 0.10) + (8333 * 0.25) + ((taxable_income - 32333) * 0.30)
-    
     return tax
 
 #James
