@@ -1,12 +1,12 @@
 def calculate_payee(self):
     """
-    Calculate PAYE (income tax) based on KRA brackets.
+    Calculating PAYE based on KRA brackets.
     Uses gross salary minus NSSF as taxable income.
     """
-    # First subtract NSSF to get taxable income
+    # Subtracting NSSF to get taxable income
     taxable_income = self.gross_salary - self.calculate_nssf()
     
-    # Now apply KRA brackets
+    # KRA brackets
     if taxable_income <= 24000:
         tax = taxable_income * 0.10
     elif taxable_income <= 32333:
