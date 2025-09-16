@@ -13,5 +13,3 @@ def calculate_nssf(gross_salary):
 def calculate_shif(gross_salary):
 	#calculate shif
 	return gross_salary * 0.0275
-totalDeductions = calculate_nssf(25000) + calculate_shif(25000)
-print(totalDeductions)
