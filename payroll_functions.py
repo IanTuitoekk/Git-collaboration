@@ -60,32 +60,3 @@ def display(gross_salary, paye, nssf, shif, housing_levy, net_salary): # Functio
 	print(f"total deductions : {paye + nssf + shif + housing_levy:.2f}")
 
 main() # entry point.
-
-# =================== MILESTONE TASK ===================
-# Create a class called Payroll whose major task is to calculate
-# an individual’s Net Salary by getting the inputs basic salary and benefits.
-# Create 5 different class methods which will calculate the payee (i.e. Tax),
-# NHIFDeductions, NSSFDeductions, gross salary, and net salary.
-
-class Payroll:
-	def _init_(self, basic_salary, benefits):
-		self.basic_salary = basic_salary
-		self.benefits = benefits
-
-	def gross_salary(self):
-		return self.basic_salary + self.benefits
-
-	def nssf_deductions(self):
-		# Reuse the same logic as the function above
-		return calculate_nssf(self.gross_salary())
-
-	def nhif_deductions(self):
-		# In this code NHIF is referred to as SHIF
-		return calculate_shif(self.gross_salary())
-
-	def paye(self):
-		return calculate_paye(self.gross_salary())
-
-	def net_salary(self):
-		gross = self.gross_salary()
-		return gross - (self.paye() + self.nssf_deductions() + self.nhif_deductions() + calculate_housing_levy(gross))
