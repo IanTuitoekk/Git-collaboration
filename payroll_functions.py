@@ -1,44 +1,39 @@
-#Jes
+#Jerolina
 def main():
 	# Get user input.
 	basic_salary = float(input("Enter basic salary: "))
-	benefits = float(input("Enter benefits: "))
+	benefits = float(input("Enter benefits amount: "))
 	# Do the calculations.
 	gross_salary = basic_salary + benefits
-	paye = calculate_paye(gross_salary)
-	nssf = calculate_nssf(gross_salary)
-	shif = calculate_shif(gross_salary)
-	housing_levy = calculate_housing_levy(gross_salary)
-	net_salary = calculate_net_salary(gross_salary)
 	# Display.
-	display(gross_salary, paye, nssf, shif, housing_levy, net_salary)
+	display(gross_salary, calculate_paye(gross_salary), calculate_nssf(gross_salary), calculate_shif(gross_salary), calculate_housing_levy(gross_salary), calculate_net_salary(gross_salary))
 
-# Karen	
-def calculate_paye(gross_salary): # calculate payee.
-	taxable_income = gross_salary - calculate_nssf(gross_salary) # Subtracting NSSF to get taxable income
+# Karen.
+def calculate_paye(gross_salary): # calculate paye.
+	taxable_income = gross_salary - calculate_nssf(gross_salary) ## Subtracting NSSF to get taxable income
 	if taxable_income <= 24000:  # Bracket one - 10%
 		tax = taxable_income * 0.10
-	elif taxable_income > 24000 and taxable_income <= 32333:  # Bracket two - 10% 25%
+	elif 24000 < taxable_income <= 32333:  # Bracket two - 10% 25%
 		tax = ((24000 * 0.10) + ((taxable_income - 24000) * 0.25))
-	elif taxable_income > 32333 and taxable_income <= 500000:  # Bracket three - 10% 25% 30%
+	elif 32333 < taxable_income <= 500000:  # Bracket three - 10% 25% 30%
 		tax = (24000 * 0.10) + (8333 * 0.25) + ((taxable_income - 32333) * 0.30)
-	elif taxable_income > 500000 and taxable_income <= 800000:  # Bracket four - 10% 25% 30% 32%
+	elif 500000 < taxable_income <= 800000:  # Bracket four - 10% 25% 30% 32%
 		tax = (24000 * 0.10) + (8333 * 0.25) + (467667 * 0.30) +((taxable_income - 500000) * 0.32)
-	else:# Above our brackets - 10% 25% 30% 32% 35%
+	else: # Above our brackets - 10% 25% 30% 32% 35%
 		tax = (24000 * 0.10) + (8333 * 0.25) + (467667 * 0.30) + (300000 * 0.32) + ((taxable_income - 800000) * 0.35)
 	return tax
 
-# James
+# James.
 def calculate_nssf(gross_salary): # return nssf deductions
 	tier1_nssf = 8000
 	tier2_nssf = 72000
 	tier1 = min(gross_salary, tier1_nssf) * 0.06 # tier one 
-	#tier two
+	#tier two.
 	tier2 = 0 
 	if gross_salary > tier1_nssf:
 		tier2 = (min(gross_salary, tier2_nssf) - tier1_nssf) * 0.06
-	total_nssf = tier1 + tier2
-	return total_nssf
+	total_nssf_deductions = tier1 + tier2
+	return total_nssf_deductions
 
 def calculate_shif(gross_salary): # return shif deduction.
 	return gross_salary * 0.0275
@@ -51,6 +46,7 @@ def calculate_net_salary(gross_salary): # return the net salary.
 	net_salary = gross_salary - (calculate_paye(gross_salary) + calculate_nssf(gross_salary) + calculate_shif(gross_salary) + calculate_housing_levy(gross_salary))
 	return net_salary
 
+# Ian. 
 def display(gross_salary, paye, nssf, shif, housing_levy, net_salary): # Function to display output.
 	print("\n\tTaxable Salary")
 	print(f"gross salary : {gross_salary:.2f}")
@@ -63,4 +59,33 @@ def display(gross_salary, paye, nssf, shif, housing_levy, net_salary): # Functio
 	print(f"net salary : {net_salary:.2f}")
 	print(f"total deductions : {paye + nssf + shif + housing_levy:.2f}")
 
-main() # entry point
+main() # entry point.
+
+# =================== MILESTONE TASK ===================
+# Create a class called Payroll whose major task is to calculate
+# an individual’s Net Salary by getting the inputs basic salary and benefits.
+# Create 5 different class methods which will calculate the payee (i.e. Tax),
+# NHIFDeductions, NSSFDeductions, gross salary, and net salary.
+
+class Payroll:
+	def _init_(self, basic_salary, benefits):
+		self.basic_salary = basic_salary
+		self.benefits = benefits
+
+	def gross_salary(self):
+		return self.basic_salary + self.benefits
+
+	def nssf_deductions(self):
+		# Reuse the same logic as the function above
+		return calculate_nssf(self.gross_salary())
+
+	def nhif_deductions(self):
+		# In this code NHIF is referred to as SHIF
+		return calculate_shif(self.gross_salary())
+
+	def paye(self):
+		return calculate_paye(self.gross_salary())
+
+	def net_salary(self):
+		gross = self.gross_salary()
+		return gross - (self.paye() + self.nssf_deductions() + self.nhif_deductions() + calculate_housing_levy(gross))
