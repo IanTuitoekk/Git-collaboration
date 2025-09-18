@@ -5,7 +5,7 @@ class Payroll:
         self. gross_salary = basic_salary + benefits
 
     def calculate_paye(self):  # calculate paye.
-        taxable_income = self.gross_salary - self.calculate_deductions()  ## Subtracting NSSF to get taxable income -- not sure really.
+        taxable_income = self.gross_salary - self.calculate_nssf()  ## Subtracting NSSF to get taxable income -- not sure really.
         if taxable_income <= 24000:  # Bracket one - 10%
             tax = taxable_income * 0.10
         elif 24000 < taxable_income <= 32333:  # Bracket two - 10% 25%
@@ -57,5 +57,6 @@ basic_salary = float(input("Enter basic salary: "))
 benefits = float(input("Enter benefits amount: "))
 # create instance of payroll class
 employee = Payroll(basic_salary, benefits)
+# display output.
 employee.display(employee.calculate_paye(), employee.calculate_nssf(), employee.calculate_shif(), employee.calculate_housing_levy(),employee.calculate_net_salary())
 
