@@ -1,5 +1,5 @@
 class Payroll: 
-    def __init__(self, basic_salary, benefits): # initilized our aatribuites (basic_salary and benefits)
+    def __init__(self, basic_salary, benefits): # initialized our attributes (basic_salary and benefits)
         self.basic_salary = basic_salary
         self.benefits = benefits
         self.gross_salary = basic_salary + benefits
@@ -19,14 +19,14 @@ class Payroll:
         return tax
 
     def calculate_nssf(self): # calculate nssf deductions.
-        tier1_nssf = 8000
-        tier2_nssf = 72000
-        tier1 = min(self.gross_salary, tier1_nssf) * 0.06  # tier one deductions
+        tier1_nssf_rate = 8000
+        tier2_nssf_rate = 72000
+        tier1 = min(self.gross_salary, tier1_nssf_rate) * 0.06  # tier one rate
 
-        # tier two.
+        # tier two rate.
         tier2 = 0
-        if self.gross_salary > tier1_nssf:
-            tier2 = (min(self.gross_salary, tier2_nssf) - tier1_nssf) * 0.06
+        if self.gross_salary > tier1_nssf_rate:
+            tier2 = (min(self.gross_salary, tier2_nssf_rate) - tier1_nssf_rate) * 0.06
         total_nssf_deductions = tier1 + tier2
         return total_nssf_deductions
 
@@ -41,8 +41,13 @@ class Payroll:
         net_salary = self.gross_salary - (self.calculate_paye() + self.calculate_nssf() + self.calculate_shif() + self.calculate_housing_levy())
         return net_salary
 
-    def display(self, paye, nssf, shif, housing_levy, net_salary):  # method to display output.
-        print("\n\tTaxable Salary")
+    def display(self):  # method to display output.
+        paye = self.calculate_paye()
+        nssf = self.calculate_nssf()
+        shif = self.calculate_shif()
+        housing_levy = self.calculate_housing_levy()
+        net_salary = self.calculate_net_salary()
+        print("\n\tGross Salary")
         print(f"gross salary : {self.gross_salary:.2f}")
         print(f"\n\tDeductions")
         print(f"paye : {paye:.2f}")
@@ -52,11 +57,15 @@ class Payroll:
         print(f"\n\tNet Income and Deductions")
         print(f"net salary : {net_salary:.2f}")
         print(f"total deductions : {paye + nssf + shif + housing_levy:.2f}")
-# get input
-basic_salary = float(input("Enter basic salary: "))
-benefits = float(input("Enter benefits amount: "))
-# create instance of payroll class
+        
+# get input -- basic salary and benefits.
+basic_salary, benefits = float(input("Enter basic salary: ")), float(input("Enter benefits amount: "))
+# check for non-negative values.
+if basic_salary < 0 or benefits < 0:
+    print("basic salary and benefits must be non-negative")
+    exit()
+# create instance of payroll class.
 employee = Payroll(basic_salary, benefits)
 # display output.
-employee.display(employee.calculate_paye(), employee.calculate_nssf(), employee.calculate_shif(), employee.calculate_housing_levy(),employee.calculate_net_salary())
+employee.display()
 
