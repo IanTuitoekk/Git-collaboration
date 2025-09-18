@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 class Payroll(ABC): 
     def __init__(self, basic_salary, benefits): # initialized our attributes (basic_salary and benefits)
         self.basic_salary = basic_salary
@@ -62,6 +63,7 @@ class Payroll(ABC):
         print(f"\n\tNet Income and Deductions")
         print(f"net salary : {net_salary:.2f}")
         print(f"total deductions : {paye + nssf + shif + housing_levy:.2f}")
+
 class Driver(Payroll): # driver class.
     def __init__(self, basic_salary, benefits, kilometers):
         super().__init__(basic_salary, benefits)
