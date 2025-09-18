@@ -1,11 +1,16 @@
-class Payroll: 
+from abc import ABC, abstractmethod
+class Payroll(ABC): 
     def __init__(self, basic_salary, benefits): # initialized our attributes (basic_salary and benefits)
         self.basic_salary = basic_salary
         self.benefits = benefits
-        self.gross_salary = basic_salary + benefits
+        self.gross_salary = self.basic_salary + self.benefits
+
+    @abstractmethod
+    def calculate_bonuses(self):
+        pass
 
     def calculate_paye(self):  # calculate paye.
-        taxable_income = self.gross_salary - self.calculate_nssf()  ## Subtracting NSSF to get taxable income -- not sure really.
+        taxable_income = self.gross_salary - self.calculate_nssf()  # Subtracting NSSF to get taxable income -- not sure really.
         if taxable_income <= 24000:  # Bracket one - 10%
             tax = taxable_income * 0.10
         elif 24000 < taxable_income <= 32333:  # Bracket two - 10% 25%
@@ -38,7 +43,8 @@ class Payroll:
         return house_levy
 
     def calculate_net_salary(self):  # return the net salary.
-        net_salary = self.gross_salary - (self.calculate_paye() + self.calculate_nssf() + self.calculate_shif() + self.calculate_housing_levy())
+        deductions = self.calculate_paye() + self.calculate_nssf() + self.calculate_shif() + self.calculate_housing_levy()
+        net_salary = self.gross_salary - deductions + getattr(self, "bonus", 0)
         return net_salary
 
     def display(self):  # method to display output.
@@ -47,7 +53,6 @@ class Payroll:
         shif = self.calculate_shif()
         housing_levy = self.calculate_housing_levy()
         net_salary = self.calculate_net_salary()
-        print("\n\tGross Salary")
         print(f"gross salary : {self.gross_salary:.2f}")
         print(f"\n\tDeductions")
         print(f"paye : {paye:.2f}")
@@ -57,15 +62,52 @@ class Payroll:
         print(f"\n\tNet Income and Deductions")
         print(f"net salary : {net_salary:.2f}")
         print(f"total deductions : {paye + nssf + shif + housing_levy:.2f}")
-        
+class Driver(Payroll): # driver class.
+    def __init__(self, basic_salary, benefits, kilometers):
+        super().__init__(basic_salary, benefits)
+        self.kilometers = kilometers
+        self.bonus = self.calculate_bonuses()
+
+    def calculate_bonuses(self): # plus 0.01% of basic.
+        return (self.basic_salary * 0.001) * self.kilometers
+
+    def display(self):
+        print("\tDrivers Payroll Details:")
+        super().display()
+        print(f"bonus : {self.bonus:.2f}")
+
+class Loader(Payroll): # loader class.
+    def __init__(self, basic_salary, benefits, kilometers):
+        super().__init__(basic_salary, benefits)
+        self.kilometers = kilometers
+        self.bonus = self.calculate_bonuses()
+    
+    def calculate_bonuses(self): # plus 0.5% of basic.
+        return (self.basic_salary * 0.002) * self.kilometers
+
+    def display(self):
+        print("\tLoader Payroll Details:")
+        super().display()
+        print(f"bonus : {self.bonus:.2f}")
+
 # get input -- basic salary and benefits.
-basic_salary, benefits = float(input("Enter basic salary: ")), float(input("Enter benefits amount: "))
+basic_salary = float(input("Enter basic salary: "))
+benefits = float(input("Enter benefits amount: "))
+kilometers = float(input("Enter kilometers travelled: "))
+employee_type =  input("Enter the employee type: ").strip().lower()
+
 # check for non-negative values.
-if basic_salary < 0 or benefits < 0:
-    print("basic salary and benefits must be non-negative")
+if basic_salary < 0 or benefits < 0 or kilometers < 0:
+    print("basic salary, benefits and kilometers must be non-negative")
     exit()
-# create instance of payroll class.
-employee = Payroll(basic_salary, benefits)
+# Initialize class.
+if employee_type == "driver":
+    employee = Driver(basic_salary, benefits, kilometers)
+elif employee_type == "loader":
+    employee = Loader(basic_salary, benefits, kilometers)
+else:
+    print("enter a valid employee.")
+    exit()
+
 # display output.
 employee.display()
-
