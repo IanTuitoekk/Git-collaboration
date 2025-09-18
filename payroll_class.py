@@ -2,7 +2,7 @@ class Payroll:
     def __init__(self, basic_salary, benefits): # initilized our aatribuites (basic_salary and benefits)
         self.basic_salary = basic_salary
         self.benefits = benefits
-        self. gross_salary = basic_salary + benefits
+        self.gross_salary = basic_salary + benefits
 
     def calculate_paye(self):  # calculate paye.
         taxable_income = self.gross_salary - self.calculate_nssf()  ## Subtracting NSSF to get taxable income -- not sure really.
@@ -26,7 +26,7 @@ class Payroll:
         # tier two.
         tier2 = 0
         if self.gross_salary > tier1_nssf:
-            tier2 = (min(self. gross_salary, tier2_nssf) - tier1_nssf) * 0.06
+            tier2 = (min(self.gross_salary, tier2_nssf) - tier1_nssf) * 0.06
         total_nssf_deductions = tier1 + tier2
         return total_nssf_deductions
 
